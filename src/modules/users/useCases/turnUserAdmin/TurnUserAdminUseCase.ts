@@ -9,7 +9,17 @@ class TurnUserAdminUseCase {
   constructor(private usersRepository: IUsersRepository) {}
 
   execute({ user_id }: IRequest): User {
-    // Complete aqui
+    const user = this.usersRepository.findById(user_id);
+
+    if (!user) {
+      throw new Error("Nenhum usuário foi encontrado!");
+    }
+
+    if (user.admin === true) {
+      throw new Error("Usuário já está marcado como admin!");
+    }
+
+    return this.usersRepository.turnAdmin(user);
   }
 }
 
